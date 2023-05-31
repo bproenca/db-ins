@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  infrack:
+  dbins:
     image: bproenca/db-ins:jvm17azul
     restart: always
     ports:
-      - "8181:8080"
+      - "8383:8080"
     deploy:
       resources:
         limits:
