@@ -20,10 +20,24 @@ public class ScheduledTasks {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	private int cnt = 0;
+
     @Scheduled(fixedRateString = "${myapp.fixedRate}")
 	public void insertData() {
 		log.info("# Insert data {}", dateFormat.format(new Date()));
 		jdbcTemplate.update("insert into ATABLE (INS_DATE) values (sysdate)");
+		printMemoryStatus(++cnt);
 	}
 
+	private void printMemoryStatus(int cnt) {
+        int mb = 1024 * 1024;
+        Runtime runtime = Runtime.getRuntime();
+        StringBuilder builder = new StringBuilder();
+        builder.append("## ").append(cnt);
+        builder.append("\tUsed Memory   : " + (runtime.totalMemory() - runtime.freeMemory()) / mb + " mb");
+        builder.append("\tFree Memory   : " + runtime.freeMemory() / mb + " mb");
+        builder.append("\tTotal Memory  : " + runtime.totalMemory() / mb + " mb");
+        builder.append("\tMax Memory    : " + runtime.maxMemory() / mb + " mb");
+       log.info(builder.toString());
+    }
 }
